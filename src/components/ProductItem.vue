@@ -1,8 +1,11 @@
 <script setup lang="ts">
-import { defineProps } from 'vue';
-import { IProduct } from '../data/products';
+import colorsData from "@/data/colors";
+import { reactive, ref } from "vue";
+import type { IProduct } from "../data/products";
 
 const props = defineProps<{ product: IProduct }>();
+const color = ref(props.product.colorsId[0]);
+const colors = reactive(colorsData);
 </script>
 
 <template>
@@ -17,31 +20,26 @@ const props = defineProps<{ product: IProduct }>();
 
     <span class="catalog__price"> {{ props.product.price }} ₽ </span>
 
-    <!-- <ul class="colors colors--black">
-          <li class="colors__item">
-            <label class="colors__label">
-              <input
-                class="colors__radio sr-only"
-                type="radio"
-                name="color-1"
-                value="#73B6EA"
-                checked=""
-              />
-              <span class="colors__value" style="background-color: #73b6ea"> </span>
-            </label>
-          </li>
-          <li class="colors__item">
-            <label class="colors__label">
-              <input class="colors__radio sr-only" type="radio" name="color-1" value="#8BE000" />
-              <span class="colors__value" style="background-color: #8be000"> </span>
-            </label>
-          </li>
-          <li class="colors__item">
-            <label class="colors__label">
-              <input class="colors__radio sr-only" type="radio" name="color-1" value="#222" />
-              <span class="colors__value" style="background-color: #222"> </span>
-            </label>
-          </li>
-        </ul> -->
+    <ul class="colors colors--black">
+      <li
+        class="colors__item"
+        :key="colorId"
+        v-for="colorId in props.product.colorsId"
+      >
+        <label class="colors__label">
+          <input
+            class="colors__radio sr-only"
+            type="radio"
+            :value="colorId"
+            v-model="color"
+          />
+          <span
+            class="colors__value"
+            :style="{ backgroundColor: colors[colorId] }"
+          >
+          </span>
+        </label>
+      </li>
+    </ul>
   </li>
 </template>

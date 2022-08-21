@@ -1,56 +1,66 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import data from './data/products';
-import ProductList from './components/ProductList.vue';
+import { computed, ref } from "vue";
+import data from "./data/products";
+import ProductList from "./components/ProductList.vue";
+import BasePagination from "./components/BasePagination.vue";
+import ProductFilter from "./components/ProductFilter.vue";
 
-const products = ref(data);
+const filterPriceFrom = ref(0);
+const filterPriceTo = ref(Math.max(...data.map((item) => item.price)));
+const filterCategoryId = ref(0);
+const filterColorId = ref(0);
 
+const page = ref(1);
+const productsPerPage = ref(3);
+
+const filteredProducts = computed(() =>
+  data.filter(
+    (product) =>
+      product.price >= filterPriceFrom.value &&
+      product.price <= filterPriceTo.value &&
+      (filterCategoryId.value === 0 ||
+        filterCategoryId.value === product.categoryId) &&
+      (filterColorId.value === 0 ||
+        product.colorsId.includes(filterColorId.value))
+  )
+);
+
+const products = computed(() => {
+  const offset = (page.value - 1) * productsPerPage.value;
+  return filteredProducts.value.slice(offset, offset + productsPerPage.value);
+});
+
+const countProducts = computed(() => filteredProducts.value.length);
+
+const paginate = (pageNumber: number) => {
+  page.value = pageNumber;
+};
 </script>
 
 <template>
-  <section class="catalog">
-    <ProductList :products="products"/>
+  <main class="content container">
+    <div class="content__top content__top--catalog">
+      <h1 class="content__title">Каталог</h1>
+      <span class="content__info"> {{ countProducts }} товара </span>
+    </div>
 
-    <ul class="catalog__pagination pagination">
-      <li class="pagination__item">
-        <a
-          class="pagination__link pagination__link--arrow pagination__link--disabled"
-          aria-label="Предыдущая страница"
-        >
-          <svg width="8" height="14" fill="currentColor">
-            <use xlink:href="#icon-arrow-left"></use>
-          </svg>
-        </a>
-      </li>
-      <li class="pagination__item">
-        <a class="pagination__link pagination__link--current"> 1 </a>
-      </li>
-      <li class="pagination__item">
-        <a class="pagination__link" href="#"> 2 </a>
-      </li>
-      <li class="pagination__item">
-        <a class="pagination__link" href="#"> 3 </a>
-      </li>
-      <li class="pagination__item">
-        <a class="pagination__link" href="#"> 4 </a>
-      </li>
-      <li class="pagination__item">
-        <a class="pagination__link" href="#"> ... </a>
-      </li>
-      <li class="pagination__item">
-        <a class="pagination__link" href="#"> 10 </a>
-      </li>
-      <li class="pagination__item">
-        <a
-          class="pagination__link pagination__link--arrow"
-          href="#"
-          aria-label="Следующая страница"
-        >
-          <svg width="8" height="14" fill="currentColor">
-            <use xlink:href="#icon-arrow-right"></use>
-          </svg>
-        </a>
-      </li>
-    </ul>
-  </section>
+    <div class="content__catalog">
+      <ProductFilter
+        v-model:price-from="filterPriceFrom"
+        v-model:price-to="filterPriceTo"
+        v-model:color-id="filterColorId"
+        v-model:category-id="filterCategoryId"
+      />
+      <section class="catalog">
+        <ProductList :products="products" />
+
+        <BasePagination
+          :page="page"
+          :per-page="productsPerPage"
+          :count="countProducts"
+          @paginate="paginate"
+        />
+      </section>
+    </div>
+  </main>
 </template>
