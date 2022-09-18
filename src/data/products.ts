@@ -1,6 +1,7 @@
 interface IProduct {
   id: number;
   categoryId: number;
+  vendor: number;
   title: string;
   price: number;
   image: string;
@@ -11,6 +12,7 @@ const products: IProduct[] = [
   {
     id: 1,
     categoryId: 4,
+    vendor: 123456,
     title: "Радионяня Motorola MBP16",
     price: 3690,
     image: "/img/radio.jpg",
@@ -19,6 +21,7 @@ const products: IProduct[] = [
   {
     id: 2,
     categoryId: 1,
+    vendor: 123456,
     title: "Ультразвуковая зубная щётка Playbrush Smart Sonicv",
     price: 5660,
     image: "/img/toothbrush.jpg",
@@ -27,6 +30,7 @@ const products: IProduct[] = [
   {
     id: 3,
     categoryId: 2,
+    vendor: 123456,
     title: "Смартфон Xiaomi Mi Mix 3 6/128GB",
     price: 21790,
     image: "/img/phone.jpg",
@@ -35,6 +39,7 @@ const products: IProduct[] = [
   {
     id: 4,
     categoryId: 3,
+    vendor: 123456,
     title: "Электроскейт Razor Cruiser",
     price: 24690,
     image: "/img/board.jpg",
@@ -43,6 +48,7 @@ const products: IProduct[] = [
   {
     id: 5,
     categoryId: 2,
+    vendor: 123456,
     title: "Смартфон Xiaomi Mi A3 4/64GB Android One",
     price: 14960,
     image: "/img/phone-2.jpg",
@@ -51,6 +57,7 @@ const products: IProduct[] = [
   {
     id: 6,
     categoryId: 2,
+    vendor: 123456,
     title: "Смартфон Xiaomi Redmi 6/128GB",
     price: 8960,
     image: "/img/phone-3.jpg",
@@ -59,6 +66,7 @@ const products: IProduct[] = [
   {
     id: 7,
     categoryId: 3,
+    vendor: 123456,
     title: "Электрический дрифт-карт Razor Crazy Cart",
     price: 39900,
     image: "/img/bicycle.jpg",

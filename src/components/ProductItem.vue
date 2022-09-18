@@ -1,24 +1,38 @@
 <script setup lang="ts">
 import colorsData from "@/data/colors";
-import { reactive, ref } from "vue";
+import { RouterLink } from "vue-router";
+import { reactive, ref, computed } from "vue";
 import type { IProduct } from "../data/products";
+import numberFormat from "@/helpers/numberFormat";
 
 const props = defineProps<{ product: IProduct }>();
 const color = ref(props.product.colorsId[0]);
 const colors = reactive(colorsData);
+
+const price = computed(() => numberFormat(props.product.price));
 </script>
 
 <template>
   <li class="catalog__item">
-    <a class="catalog__pic" href="#">
+    <RouterLink
+      class="catalog__pic"
+      :to="{
+        name: 'product',
+        params: {
+          id: props.product.id,
+        },
+      }"
+    >
       <img :src="props.product.image" :alt="props.product.title" />
-    </a>
+    </RouterLink>
 
     <h3 class="catalog__title">
-      <a href="#">{{ props.product.title }}</a>
+      <RouterLink :to="'/product/' + props.product.id">{{
+        props.product.title
+      }}</RouterLink>
     </h3>
 
-    <span class="catalog__price"> {{ props.product.price }} ₽ </span>
+    <span class="catalog__price"> {{ price }} ₽ </span>
 
     <ul class="colors colors--black">
       <li
