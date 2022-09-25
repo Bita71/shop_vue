@@ -5,11 +5,9 @@ import ProductList from "../components/ProductList.vue";
 import BasePagination from "../components/BasePagination.vue";
 import ProductFilter from "../components/ProductFilter.vue";
 
-const props = defineProps<{ category: number }>();
-
 const filterPriceFrom = ref(0);
 const filterPriceTo = ref(Math.max(...data.map((item) => item.price)));
-const filterCategoryId = ref(Number(props.category) || 0);
+const filterCategoryId = ref(0);
 const filterColorId = ref(0);
 
 const page = ref(1);
