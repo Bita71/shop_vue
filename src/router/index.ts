@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
 import ProductView from "@/views/ProductView.vue";
-import HomeView from "../views/HomeView.vue";
-import NotFound from "../views/NotFound.vue";
+import HomeView from "@/views/HomeView.vue";
+import NotFound from "@/views/NotFound.vue";
+import CartView from "@/views/CartView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -10,13 +11,17 @@ const router = createRouter({
       path: "/",
       name: "home",
       component: HomeView,
-      props: true,
     },
     {
       path: "/product/:id",
       name: "product",
       component: ProductView,
       props: true,
+    },
+    {
+      path: "/cart",
+      name: "cart",
+      component: CartView,
     },
     {
       path: "/:catchAll(.*)",
