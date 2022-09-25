@@ -5,6 +5,9 @@ import categories from "@/data/categories";
 import { RouterLink } from "vue-router";
 import { computed, ref, reactive } from "vue";
 import numberFormat from "@/helpers/numberFormat";
+import { useCartStore } from "@/stores/cart";
+
+const cart = useCartStore();
 
 const props = defineProps<{ id: string }>();
 
@@ -30,6 +33,23 @@ const category = computed(
 );
 
 const price = computed(() => numberFormat(product.value.price));
+
+const amount = ref(1);
+
+const handleAmountDecrease = () => {
+  if (amount.value === 1) {
+    return;
+  }
+  amount.value--;
+};
+
+const handleAmountIncrease = () => {
+  amount.value++;
+};
+
+const addToCart = () => {
+  cart.addProduct(product.value.id, amount.value);
+};
 </script>
 
 <template>
@@ -46,9 +66,6 @@ const price = computed(() => numberFormat(product.value.price));
             class="breadcrumbs__link"
             :to="{
               name: 'home',
-              params: {
-                category: product.categoryId,
-              },
             }"
           >
             {{ category }}
@@ -91,7 +108,12 @@ const price = computed(() => numberFormat(product.value.price));
         <span class="item__code">Артикул: {{ product.vendor }}</span>
         <h2 class="item__title">{{ product.title }}</h2>
         <div class="item__form">
-          <form class="form" action="#" method="POST">
+          <form
+            class="form"
+            action="#"
+            method="POST"
+            @submit.prevent="addToCart"
+          >
             <b class="item__price"> {{ price }} ₽ </b>
 
             <fieldset class="form__block">
@@ -162,15 +184,23 @@ const price = computed(() => numberFormat(product.value.price));
 
             <div class="item__row">
               <div class="form__counter">
-                <button type="button" aria-label="Убрать один товар">
+                <button
+                  type="button"
+                  aria-label="Убрать один товар"
+                  @click="handleAmountDecrease"
+                >
                   <svg width="12" height="12" fill="currentColor">
                     <use xlink:href="#icon-minus"></use>
                   </svg>
                 </button>
 
-                <input type="text" value="1" name="count" />
+                <input type="text" v-model.number="amount" name="count" />
 
-                <button type="button" aria-label="Добавить один товар">
+                <button
+                  type="button"
+                  aria-label="Добавить один товар"
+                  @click="handleAmountIncrease"
+                >
                   <svg width="12" height="12" fill="currentColor">
                     <use xlink:href="#icon-plus"></use>
                   </svg>
