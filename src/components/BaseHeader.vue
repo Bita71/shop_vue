@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import { useCartStore } from "@/stores/cart";
 import { RouterLink } from "vue-router";
+const cart = useCartStore();
 </script>
 
 <template>
@@ -21,17 +23,19 @@ import { RouterLink } from "vue-router";
 
       <a class="header__tel" href="tel:8 800 600 90 09"> 8 800 600 90 09 </a>
 
-      <a
+      <RouterLink
+        :to="{ name: 'cart' }"
         class="header__cart"
-        href="cart.html"
         aria-label="Корзина с
           товарами"
       >
         <svg width="30" height="21" fill="currentColor">
           <use xlink:href="#icon-cart"></use>
         </svg>
-        <span class="header__count" aria-label="Количество товаров">3</span>
-      </a>
+        <span class="header__count" aria-label="Количество товаров">{{
+          cart.products.length
+        }}</span>
+      </RouterLink>
     </div>
   </header>
 </template>
